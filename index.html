@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe</title>
+  <link rel="icon" href="tic-tac-toe.ico" sizes="any">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #d9dee7;
+      --accent: #2563eb;
+      --accent-soft: #e8f0ff;
+      --win: #0f766e;
+      --win-soft: #e2f7f3;
+      --draw: #6b7280;
+      --draw-soft: #eef0f3;
+      --shadow: 0 14px 40px rgba(31, 41, 55, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      width: min(100%, 420px);
+      display: grid;
+      gap: 22px;
+    }
+
+    .game {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      display: grid;
+      gap: 24px;
+    }
+
+    header {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: min(234px, 82%);
+      height: auto;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 42px;
+    }
+
+    .ai-watch-icon {
+      display: none;
+      width: 51px;
+      height: 51px;
+      flex: 0 0 51px;
+    }
+
+    .training-mode .ai-watch-icon {
+      display: block;
+      animation: flash 1800ms ease-in-out infinite;
+    }
+
+    .training-mode .ai-watch-icon:last-child {
+      animation-delay: 900ms;
+    }
+
+    @keyframes flash {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.28;
+        transform: scale(0.92);
+      }
+    }
+
+    .status {
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .status.win {
+      background: var(--win-soft);
+      color: var(--win);
+    }
+
+    .status.draw {
+      background: var(--draw-soft);
+      color: var(--draw);
+    }
+
+    .board {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      aspect-ratio: 1;
+      margin: 6px 0 8px;
+    }
+
+    .cell {
+      min-width: 0;
+      width: 100%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      appearance: none;
+      background: #ffffff;
+      color: var(--text);
+      font-family: inherit;
+      font-size: clamp(42px, 17vw, 68px);
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+    }
+
+    .cell:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: #fbfdff;
+      transform: translateY(-1px);
+    }
+
+    .cell:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 3px;
+    }
+
+    .cell:disabled {
+      cursor: default;
+    }
+
+    .cell.winning-cell {
+      border-color: var(--win);
+      background: var(--win-soft);
+      color: var(--win);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .mode-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .mode-control label {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .mode-control select {
+      min-height: 40px;
+      min-width: 170px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fed13f;
+      color: #111827;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mode-control select:disabled {
+      color: var(--muted);
+      background: #f3f4f6;
+      cursor: default;
+    }
+
+    .reset {
+      min-height: 42px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--text);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .reset:hover {
+      background: #111827;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="game" aria-label="Two player tic-tac-toe game">
+      <header>
+        <img class="logo" src="estime_logo_RGB.png" alt="Estime">
+        <div class="title-row" id="titleRow">
+          <img class="ai-watch-icon" src="ia-watching-eye.svg" alt="" aria-hidden="true">
+          <h1>Tic-Tac-Toe</h1>
+          <img class="ai-watch-icon" src="ia-watching-eye.svg" alt="" aria-hidden="true">
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite">X commence</div>
+      </header>
+
+      <div class="board" id="board" aria-label="Tic-tac-toe board">
+        <button class="cell" type="button" aria-label="Empty cell 1"></button>
+        <button class="cell" type="button" aria-label="Empty cell 2"></button>
+        <button class="cell" type="button" aria-label="Empty cell 3"></button>
+        <button class="cell" type="button" aria-label="Empty cell 4"></button>
+        <button class="cell" type="button" aria-label="Empty cell 5"></button>
+        <button class="cell" type="button" aria-label="Empty cell 6"></button>
+        <button class="cell" type="button" aria-label="Empty cell 7"></button>
+        <button class="cell" type="button" aria-label="Empty cell 8"></button>
+        <button class="cell" type="button" aria-label="Empty cell 9"></button>
+      </div>
+
+      <div class="actions">
+        <button class="reset" id="reset" type="button">Recommencer la partie</button>
+      </div>
+
+      <div class="mode-control">
+        <label for="mode">Mode</label>
+        <select id="mode" name="mode">
+          <option value="manual">Standard</option>
+          <option value="ai-training">Entraînement d'IA</option>
+          <option value="vs-ai">Jouer contre l'IA</option>
+        </select>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const cells = Array.from(document.querySelectorAll(".cell"));
+    const status = document.querySelector("#status");
+    const resetButton = document.querySelector("#reset");
+    const modeSelect = document.querySelector("#mode");
+    const titleRow = document.querySelector("#titleRow");
+
+    const winningLines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+
+    let board = Array(9).fill("");
+    let currentPlayer = "X";
+    let gameOver = false;
+
+    function updateStatus(message, state = "") {
+      status.textContent = message;
+      status.className = `status ${state}`.trim();
+    }
+
+    function updateTrainingModeIcon() {
+      titleRow.classList.toggle("training-mode", modeSelect.value === "ai-training");
+    }
+
+    function findWinningLine() {
+      return winningLines.find(([a, b, c]) => {
+        return board[a] && board[a] === board[b] && board[a] === board[c];
+      });
+    }
+
+    function freezeBoard() {
+      cells.forEach((cell) => {
+        cell.disabled = true;
+      });
+    }
+
+    function handleMove(index) {
+      if (gameOver || board[index]) {
+        return;
+      }
+
+      board[index] = currentPlayer;
+      modeSelect.disabled = true;
+      cells[index].textContent = currentPlayer;
+      cells[index].setAttribute("aria-label", `Cell ${index + 1}, ${currentPlayer}`);
+
+      const winningLine = findWinningLine();
+
+      if (winningLine) {
+        gameOver = true;
+        winningLine.forEach((cellIndex) => {
+          cells[cellIndex].classList.add("winning-cell");
+        });
+        updateStatus(`${currentPlayer} a gagné !`, "win");
+        freezeBoard();
+        return;
+      }
+
+      if (board.every(Boolean)) {
+        gameOver = true;
+        updateStatus("partie nulle", "draw");
+        freezeBoard();
+        return;
+      }
+
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      updateStatus(`C'est le tour des ${currentPlayer}'`);
+    }
+
+    function resetGame() {
+      board = Array(9).fill("");
+      currentPlayer = "X";
+      gameOver = false;
+      modeSelect.disabled = false;
+      updateStatus("X commence");
+
+      cells.forEach((cell, index) => {
+        cell.textContent = "";
+        cell.disabled = false;
+        cell.classList.remove("winning-cell");
+        cell.setAttribute("aria-label", `Empty cell ${index + 1}`);
+      });
+    }
+
+    cells.forEach((cell, index) => {
+      cell.addEventListener("click", () => handleMove(index));
+    });
+
+    modeSelect.addEventListener("change", updateTrainingModeIcon);
+    resetButton.addEventListener("click", resetGame);
+    updateTrainingModeIcon();
+  </script>
+</body>
+</html>
