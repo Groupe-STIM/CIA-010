@@ -6,8 +6,9 @@ const titleRow = document.querySelector("#titleRow");
 const trainingPanel = document.querySelector("#trainingPanel");
 const aiPanel = document.querySelector("#aiPanel");
 const savedGamesCount = document.querySelector("#savedGamesCount");
-const trainedGamesCount = document.querySelector("#trainedGamesCount");
 const confidenceScore = document.querySelector("#confidenceScore");
+const confidenceLine = document.querySelector("#confidenceLine");
+const confidenceDots = document.querySelector("#confidenceDots");
 const trainModelButton = document.querySelector("#trainModel");
 const clearTrainingDataButton = document.querySelector("#clearTrainingData");
 
@@ -37,6 +38,7 @@ let model = null;
 let modelIsReady = false;
 let isTrainingModel = false;
 let lastConfidence = null;
+let confidenceHistory = [];
 
 let trainingData = {
   inputs: [],
@@ -143,9 +145,42 @@ function updatePanels() {
   trainingPanel.hidden = modeSelect.value !== "ai-training";
   aiPanel.hidden = modeSelect.value !== "vs-ai";
   savedGamesCount.textContent = trainingData.savedGames.toLocaleString("fr-CA");
-  trainedGamesCount.textContent = trainingData.trainedGames.toLocaleString("fr-CA");
   confidenceScore.textContent = lastConfidence === null ? "--" : `${Math.round(lastConfidence * 100)} %`;
   trainModelButton.disabled = isTrainingModel || trainingData.inputs.length === 0 || !window.tf;
+  updateConfidenceChart();
+}
+
+function getConfidencePoint(confidence, index) {
+  const xStart = 42;
+  const xStep = 48;
+  const yTop = 8;
+  const yBottom = 88;
+  const score = Math.max(0, Math.min(confidence ?? 0, 1));
+
+  return {
+    x: xStart + index * xStep,
+    y: yBottom - score * (yBottom - yTop)
+  };
+}
+
+function updateConfidenceChart() {
+  const points = confidenceHistory
+    .slice(0, 5)
+    .map((confidence, index) => getConfidencePoint(confidence, index));
+
+  confidenceLine.setAttribute("points", points.map(({ x, y }) => `${x},${y}`).join(" "));
+  confidenceDots.textContent = "";
+
+  points.forEach(({ x, y }) => {
+    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+    dot.setAttribute("class", "chart-dot");
+    dot.setAttribute("cx", x);
+    dot.setAttribute("cy", y);
+    dot.setAttribute("r", 4);
+
+    confidenceDots.append(dot);
+  });
 }
 
 function findWinningLine(state = board) {
@@ -344,6 +379,7 @@ async function makeAiMove(activeGameId) {
   }
 
   lastConfidence = move.confidence;
+  confidenceHistory.push(move.confidence ?? 0);
   updatePanels();
   aiThinking = false;
   placeMark(move.index, aiPlayer);
@@ -430,6 +466,7 @@ async function clearTrainingData() {
   };
   moveHistory = createEmptyHistory();
   lastConfidence = null;
+  confidenceHistory = [];
   saveTrainingData();
 
   if (model) {
@@ -459,6 +496,8 @@ function resetGame(showModeStatus = true) {
   aiThinking = false;
   gameId += 1;
   moveHistory = createEmptyHistory();
+  lastConfidence = null;
+  confidenceHistory = [];
 
   cells.forEach((cell, index) => {
     cell.textContent = "";
@@ -468,6 +507,7 @@ function resetGame(showModeStatus = true) {
   });
 
   renderBoard();
+  updatePanels();
 
   if (!showModeStatus) {
     return;
@@ -495,7 +535,6 @@ function changeMode() {
   }
 
   previousMode = nextMode;
-  lastConfidence = null;
   updateTrainingModeIcon();
   updatePanels();
   resetGame();

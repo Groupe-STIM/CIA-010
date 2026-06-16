@@ -227,6 +227,50 @@ h1 {
   cursor: default;
 }
 
+.confidence-chart {
+  min-width: 0;
+  padding: 8px 8px 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.confidence-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chart-axis {
+  stroke: var(--line);
+  stroke-width: 2;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--ai);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.chart-dot {
+  fill: var(--ai);
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.chart-label,
+.chart-move-label {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.chart-move-label {
+  text-anchor: middle;
+}
+
 .board {
   width: 100%;
   display: grid;

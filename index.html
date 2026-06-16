@@ -58,12 +58,24 @@
 
       <section class="mode-panel" id="aiPanel" aria-label="Information sur l'IA" hidden>
         <div class="panel-stat">
-          <span class="panel-label">Nombre de parties utilisées pendant l'entraînement</span>
-          <strong id="trainedGamesCount">0</strong>
-        </div>
-        <div class="panel-stat">
-          <span class="panel-label">Score de confiance</span>
+          <span class="panel-label">Score de confiance du dernier tour</span>
           <strong id="confidenceScore">--</strong>
+        </div>
+        <div class="confidence-chart" aria-label="Historique des scores de confiance de l'IA">
+          <svg id="confidenceChart" viewBox="0 0 260 112" role="img" aria-labelledby="confidenceChartTitle">
+            <title id="confidenceChartTitle">Scores de confiance des coups joués par l'IA</title>
+            <line class="chart-axis" x1="28" y1="8" x2="28" y2="88"></line>
+            <line class="chart-axis" x1="28" y1="88" x2="248" y2="88"></line>
+            <text class="chart-label" x="5" y="13">100%</text>
+            <text class="chart-label" x="10" y="92">0%</text>
+            <text class="chart-move-label" x="42" y="104">1</text>
+            <text class="chart-move-label" x="90" y="104">2</text>
+            <text class="chart-move-label" x="138" y="104">3</text>
+            <text class="chart-move-label" x="186" y="104">4</text>
+            <text class="chart-move-label" x="234" y="104">5</text>
+            <polyline class="chart-line" id="confidenceLine" points=""></polyline>
+            <g id="confidenceDots"></g>
+          </svg>
         </div>
       </section>
     </section>
