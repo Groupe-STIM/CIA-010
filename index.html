@@ -9,7 +9,7 @@
 </head>
 <body>
   <main>
-    <section class="game" aria-label="Two player tic-tac-toe game">
+    <section class="game" aria-label="Machine learning tic-tac-toe game">
       <header>
         <img class="logo" src="estime_logo_RGB.png" alt="Estime">
         <div class="title-row" id="titleRow">
@@ -44,9 +44,32 @@
           <option value="vs-ai">Jouer contre l'IA</option>
         </select>
       </div>
+
+      <section class="mode-panel" id="trainingPanel" aria-label="Contrôles d'entraînement" hidden>
+        <div class="panel-stat">
+          <span class="panel-label">Nombre de parties enregistrées</span>
+          <strong id="savedGamesCount">0</strong>
+        </div>
+        <div class="panel-actions">
+          <button class="panel-button primary" id="trainModel" type="button">Entraîner le modèle</button>
+          <button class="panel-button" id="clearTrainingData" type="button">Effacer les données</button>
+        </div>
+      </section>
+
+      <section class="mode-panel" id="aiPanel" aria-label="Information sur l'IA" hidden>
+        <div class="panel-stat">
+          <span class="panel-label">Nombre de parties utilisées pendant l'entraînement</span>
+          <strong id="trainedGamesCount">0</strong>
+        </div>
+        <div class="panel-stat">
+          <span class="panel-label">Score de confiance</span>
+          <strong id="confidenceScore">--</strong>
+        </div>
+      </section>
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js" defer></script>
   <script src="main.js" defer></script>
 </body>
 </html>
