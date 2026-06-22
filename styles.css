@@ -109,6 +109,7 @@ h1 {
 }
 
 .status {
+  position: relative;
   min-height: 44px;
   display: grid;
   place-items: center;
@@ -119,6 +120,41 @@ h1 {
   font-size: 18px;
   font-weight: 700;
   text-align: center;
+}
+
+.status-message {
+  padding: 0 30px;
+}
+
+.status-inspect {
+  position: absolute;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.status-inspect:hover {
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.status-inspect:focus-visible,
+.dialog-close:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.28);
+  outline-offset: 2px;
+}
+
+.status-inspect[hidden] {
+  display: none;
 }
 
 .status.win {
@@ -186,6 +222,32 @@ h1 {
   color: var(--ai);
   font-size: 25px;
   line-height: 1;
+}
+
+.recorded-info {
+  gap: 10px;
+}
+
+.recorded-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.recorded-stat {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  padding: 9px;
+  border-radius: 6px;
+  background: var(--ai-soft);
+}
+
+.recorded-stat span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 700;
 }
 
 .panel-actions {
@@ -269,6 +331,113 @@ h1 {
 
 .chart-move-label {
   text-anchor: middle;
+}
+
+.recorded-moves-dialog {
+  width: min(92vw, 420px);
+  max-height: min(82vh, 720px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: 0 20px 60px rgba(31, 41, 55, 0.24);
+}
+
+.recorded-moves-dialog::backdrop {
+  background: rgba(31, 41, 55, 0.48);
+}
+
+.dialog-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.dialog-close {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #eef0f3;
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialog-close:hover {
+  background: #e1e5eb;
+}
+
+.recorded-moves-list {
+  max-height: calc(min(82vh, 720px) - 55px);
+  overflow-y: auto;
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.recorded-move-item {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.recorded-move-item h3 {
+  width: 100%;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.recorded-board {
+  width: min(100%, 210px);
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.recorded-board-cell {
+  min-width: 0;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.recorded-board-cell.recorded-move-cell {
+  border: 2px solid var(--ai);
+  background: #fed13f;
+  color: #111827;
 }
 
 .board {

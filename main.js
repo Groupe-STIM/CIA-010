@@ -1,10 +1,16 @@
 const cells = Array.from(document.querySelectorAll(".cell"));
 const status = document.querySelector("#status");
+const statusMessage = document.querySelector("#statusMessage");
+const inspectRecordedMovesButton = document.querySelector("#inspectRecordedMoves");
+const recordedMovesDialog = document.querySelector("#recordedMovesDialog");
+const closeRecordedMovesButton = document.querySelector("#closeRecordedMoves");
+const recordedMovesList = document.querySelector("#recordedMovesList");
 const resetButton = document.querySelector("#reset");
 const modeSelect = document.querySelector("#mode");
 const titleRow = document.querySelector("#titleRow");
 const trainingPanel = document.querySelector("#trainingPanel");
 const aiPanel = document.querySelector("#aiPanel");
+const savedMovesCount = document.querySelector("#savedMovesCount");
 const savedGamesCount = document.querySelector("#savedGamesCount");
 const confidenceScore = document.querySelector("#confidenceScore");
 const confidenceLine = document.querySelector("#confidenceLine");
@@ -39,6 +45,7 @@ let modelIsReady = false;
 let isTrainingModel = false;
 let lastConfidence = null;
 let confidenceHistory = [];
+let latestRecordedMoves = [];
 
 let trainingData = {
   inputs: [],
@@ -128,9 +135,10 @@ function createModel() {
   return nextModel;
 }
 
-function updateStatus(message, state = "") {
-  status.textContent = message;
+function updateStatus(message, state = "", showRecordedMoves = false) {
+  statusMessage.textContent = message;
   status.className = `status ${state}`.trim();
+  inspectRecordedMovesButton.hidden = !showRecordedMoves;
 }
 
 function updateTrainingModeIcon() {
@@ -144,6 +152,7 @@ function updateTrainingModeIcon() {
 function updatePanels() {
   trainingPanel.hidden = modeSelect.value !== "ai-training";
   aiPanel.hidden = modeSelect.value !== "vs-ai";
+  savedMovesCount.textContent = trainingData.inputs.length.toLocaleString("fr-CA");
   savedGamesCount.textContent = trainingData.savedGames.toLocaleString("fr-CA");
   confidenceScore.textContent = lastConfidence === null ? "--" : `${Math.round(lastConfidence * 100)} %`;
   trainModelButton.disabled = isTrainingModel || trainingData.inputs.length === 0 || !window.tf;
@@ -224,8 +233,10 @@ function recordMove(player, index) {
   }
 
   moveHistory[player].push({
+    board: [...board],
     input: encodeBoardForPlayer(board, player),
-    label: index
+    label: index,
+    player
   });
 }
 
@@ -235,6 +246,12 @@ function addWinnerExamples(winner) {
   if (!winnerHistory.length) {
     return;
   }
+
+  latestRecordedMoves = winnerHistory.map(({ board: state, label, player }) => ({
+    board: [...state],
+    label,
+    player
+  }));
 
   winnerHistory.forEach(({ input, label }) => {
     trainingData.inputs.push(input);
@@ -270,7 +287,7 @@ function finishGame(winner) {
   if (winner) {
     if (modeSelect.value === "ai-training") {
       addWinnerExamples(winner);
-      updateStatus(`${winner} a gagné ! Partie enregistrée.`, "win");
+      updateStatus(`${winner} a gagné ! Partie enregistrée.`, "win", true);
     } else if (modeSelect.value === "vs-ai" && winner === aiPlayer) {
       updateStatus("L'IA a gagné !", "ai-win");
     } else if (modeSelect.value === "vs-ai" && winner === humanPlayer) {
@@ -295,6 +312,52 @@ function checkForEnd() {
   }
 
   return false;
+}
+
+function createRecordedBoard(move, moveNumber) {
+  const item = document.createElement("article");
+  const heading = document.createElement("h3");
+  const previewBoard = document.createElement("div");
+
+  item.className = "recorded-move-item";
+  heading.textContent = `Coup ${moveNumber}`;
+  previewBoard.className = "recorded-board";
+  previewBoard.setAttribute("aria-label", `Coup enregistré ${moveNumber}`);
+
+  move.board.forEach((value, index) => {
+    const cell = document.createElement("div");
+    const isRecordedMove = index === move.label;
+
+    cell.className = "recorded-board-cell";
+    cell.classList.toggle("recorded-move-cell", isRecordedMove);
+    cell.textContent = isRecordedMove ? move.player : value;
+    previewBoard.append(cell);
+  });
+
+  item.append(heading, previewBoard);
+  return item;
+}
+
+function openRecordedMovesDialog() {
+  if (!latestRecordedMoves.length) {
+    return;
+  }
+
+  recordedMovesList.textContent = "";
+  latestRecordedMoves.forEach((move, index) => {
+    recordedMovesList.append(createRecordedBoard(move, index + 1));
+  });
+  recordedMovesDialog.showModal();
+}
+
+function clearRecordedMovesPreview() {
+  latestRecordedMoves = [];
+  recordedMovesList.textContent = "";
+  inspectRecordedMovesButton.hidden = true;
+
+  if (recordedMovesDialog.open) {
+    recordedMovesDialog.close();
+  }
 }
 
 function placeMark(index, player) {
@@ -498,6 +561,7 @@ function resetGame(showModeStatus = true) {
   moveHistory = createEmptyHistory();
   lastConfidence = null;
   confidenceHistory = [];
+  clearRecordedMovesPreview();
 
   cells.forEach((cell, index) => {
     cell.textContent = "";
@@ -548,6 +612,13 @@ modeSelect.addEventListener("change", changeMode);
 resetButton.addEventListener("click", () => resetGame());
 trainModelButton.addEventListener("click", trainModel);
 clearTrainingDataButton.addEventListener("click", clearTrainingData);
+inspectRecordedMovesButton.addEventListener("click", openRecordedMovesDialog);
+closeRecordedMovesButton.addEventListener("click", () => recordedMovesDialog.close());
+recordedMovesDialog.addEventListener("click", (event) => {
+  if (event.target === recordedMovesDialog) {
+    recordedMovesDialog.close();
+  }
+});
 
 loadTrainingData();
 updateTrainingModeIcon();
