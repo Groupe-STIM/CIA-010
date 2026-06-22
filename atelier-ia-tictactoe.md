@@ -698,159 +698,219 @@ Question :
 
 ---
 
-## Acte 5 — Les limites de l'apprentissage
+## Acte 5 — Peut-on apprendre de mauvaises habitudes à une IA ?
 
-Notre IA est capable de jouer.
+Jusqu'à maintenant, nous avons essayé d'aider notre IA.
 
-Mais cela signifie-t-il qu'elle joue parfaitement ?
+Nous lui avons montré :
+
+* des parties gagnantes;
+* de bonnes stratégies;
+* de nouveaux exemples.
+
+Nous avons même vu qu'en ajoutant de nouvelles données, il était parfois possible d'améliorer son comportement.
 
 Question :
 
-> Que se passerait-il si nous entraînions l'IA avec de mauvais exemples ?
+> Que se passerait-il si nous lui montrions de mauvaises stratégies ?
 
-Pour répondre à cette question, nous allons réaliser une nouvelle expérience.
+L'IA serait-elle capable de s'en rendre compte ?
 
-### Activité — Repartons de zéro
+---
+
+### Activité — Entraînons volontairement une mauvaise IA
 
 #### Étape 1
 
-Cliquer sur le bouton permettant d'effacer toutes les données d'entraînement.
-
-Observer les compteurs :
-
-- nombre de parties enregistrées;
-- nombre total d'exemples d'entraînement.
+Avant de commencer, effacer les données d'entraînement précédentes.
 
 Question :
 
-> Pourquoi devons-nous repartir de zéro pour cette expérience ?
+> Que pensez-vous qu'il arrivera si nous entraînons l'IA avec de mauvais exemples ?
 
-Discussion :
+Chaque équipe formule une hypothèse.
 
-Si nous conservons les anciennes données, il sera difficile d'observer l'effet des nouvelles données.
-
-Nous voulons comparer deux entraînements différents.
-
-Message :
-
-Comme dans une expérience scientifique, nous modifions une seule variable à la fois : la qualité des données.
+---
 
 #### Étape 2
 
-Créer volontairement un jeu de données contenant quelques mauvaises décisions.
+Passer en mode :
 
-Consigne :
+**Entraînement IA**
 
-Lorsqu'une victoire immédiate est possible, ne la prenez pas.
+Mission :
 
-Choisissez plutôt un autre coup et essayez de gagner la partie plus tard.
+Créer volontairement des parties contenant de mauvaises habitudes.
 
-Exemple :
+Par exemple :
+
+* ignorer une victoire immédiate;
+* ne pas bloquer un adversaire lorsqu'il le faudrait;
+* jouer un coup moins efficace alors qu'un meilleur coup est disponible;
+* retarder volontairement une victoire.
+
+L'objectif n'est pas de perdre.
+
+L'objectif est de gagner malgré ces mauvaises décisions.
+
+Ainsi, ces coups seront enregistrés dans les données d'entraînement.
+
+---
+
+#### Étape 3
+
+Observer l'un des exemples enregistrés.
+
+Discussion :
+
+Supposons la situation suivante :
 
 ```text
 X | X |
 ---------
-O | O |
+O |   |
 ---------
-| | 
+| O |
 ```
 
-Dans cette situation, O peut gagner immédiatement en complétant la deuxième ligne.
-
-Pour cette expérience, le joueur devra volontairement choisir un autre coup.
-
 Question :
 
-> Que se passera-t-il si l'IA observe plusieurs gagnants qui ignorent une victoire immédiate ?
+> Où devrait jouer X ?
 
-#### Étape 3
+Réponse attendue :
 
-Jouer plusieurs parties en respectant cette consigne.
+```text
+X | X | X
+---------
+O |   |
+---------
+| O |
+```
 
-Objectif :
+X devrait compléter la ligne et gagner immédiatement.
 
-Créer un nouveau jeu de données contenant plusieurs exemples de décisions discutables.
+Mais imaginons que le joueur choisisse plutôt un autre coup.
 
-Observer les compteurs :
-
-- nombre de parties enregistrées;
-- nombre total d'exemples d'entraînement.
-
-#### Étape 4
-
-Entraîner une nouvelle IA à partir de ces données.
-
-Question :
-
-> Cette nouvelle IA jouera-t-elle aussi bien que la précédente ?
-
-Chaque équipe formule une hypothèse avant l'entraînement.
-
-#### Étape 5
-
-Jouer contre la nouvelle IA.
-
-Observer :
-
-- les coups joués;
-- les niveaux de confiance;
-- les situations où l'IA semble hésiter;
-- les situations où l'IA semble prendre de mauvaises décisions.
-
-### Comparaison
-
-Questions :
-
-- Quelle IA semblait jouer le mieux ?
-- L'IA entraînée avec les premières données ?
-- L'IA entraînée avec les nouvelles données ?
-- Avez-vous observé des comportements surprenants ?
+S'il gagne malgré tout quelques tours plus tard, l'application enregistrera quand même ce coup.
 
 Discussion :
 
-Les élèves comparent les résultats des deux expériences.
+Question :
 
-Ils constatent que la qualité des données influence directement la qualité des décisions de l'IA.
+> Ce coup a-t-il contribué à la victoire ?
+
+Oui.
+
+> Était-ce forcément le meilleur coup possible ?
+
+Non.
+
+---
+
+#### Étape 4
+
+Réentraîner l'IA avec ces nouvelles données.
+
+Observer :
+
+* le nombre de parties enregistrées;
+* le nombre d'exemples utilisés pour l'entraînement.
+
+Question :
+
+> Comment pensez-vous que l'IA va se comporter maintenant ?
+
+Chaque équipe formule une hypothèse.
+
+---
+
+#### Étape 5
+
+Passer en mode :
+
+**Jouer contre l'IA**
+
+Jouer plusieurs parties.
+
+Observer :
+
+* les décisions prises par l'IA;
+* les erreurs commises;
+* les occasions manquées;
+* les stratégies inhabituelles.
+
+Questions :
+
+* L'IA semble-t-elle différente ?
+* Commet-elle davantage d'erreurs ?
+* Reproduit-elle certaines mauvaises habitudes observées pendant l'entraînement ?
+* Certaines situations semblent-elles moins bien gérées qu'avant ?
+
+---
+
+### Discussion
+
+Question :
+
+> Pourquoi l'IA reproduit-elle ces erreurs ?
+
+Discussion :
+
+L'IA ne connaît pas les règles du jeu.
+
+Elle ne sait pas qu'un exemple est bon ou mauvais.
+
+Elle ne sait pas qu'un coup aurait pu être meilleur.
+
+Elle apprend simplement à partir des exemples qu'on lui montre.
+
+Si les exemples contiennent de mauvaises habitudes, elle risque d'apprendre ces mauvaises habitudes.
+
+---
 
 ### Réflexion
 
 Question :
 
-> Pourquoi l'IA reproduit-elle parfois des décisions discutables ?
+> Tous les coups joués par un gagnant sont-ils forcément de bons coups ?
 
 Discussion :
 
-L'IA ne distingue pas toujours :
+Non.
 
-- un excellent coup;
-- un coup moyen;
-- un coup chanceux.
+Un joueur peut gagner une partie tout en commettant plusieurs erreurs.
 
-Elle apprend à partir des exemples disponibles.
+Certaines décisions sont excellentes.
 
-Si plusieurs gagnants ignorent une victoire immédiate, l'IA peut conclure que cette décision est acceptable puisqu'elle apparaît dans les données d'entraînement.
+D'autres sont simplement suffisantes pour gagner.
 
-### Message important
+L'IA est incapable de faire cette distinction toute seule.
 
-L'IA ne juge pas la qualité des données.
-
-Elle apprend à partir de ce qu'on lui montre.
-
-Si les données sont incomplètes, biaisées ou de faible qualité, les résultats risquent de l'être également.
+---
 
 ### Message clé
 
-**Garbage In, Garbage Out**
+```text
+Mauvaises données
+        ↓
+Mauvais apprentissage
+        ↓
+Mauvaises décisions
+```
 
-Des données de mauvaise qualité peuvent produire une IA de mauvaise qualité.
+Une IA est souvent aussi bonne que les exemples qu'on lui montre.
+
+---
 
 ### Transition
 
-Notre IA apprend à partir des exemples.
+Jusqu'à maintenant, notre IA apprenait uniquement à partir d'exemples.
 
-Mais existe-t-il une autre façon de construire une IA pour jouer au Tic-Tac-Toe ?
+Question :
 
-Et si l'ordinateur utilisait directement les règles du jeu pour prendre ses décisions ?
+> Existe-t-il une autre façon de construire une IA pour jouer au Tic-Tac-Toe ?
+
+> Une IA pourrait-elle prendre des décisions sans avoir besoin d'être entraînée à partir de données ?
 
 ---
 
