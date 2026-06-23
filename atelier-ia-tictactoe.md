@@ -1117,85 +1117,75 @@ Question :
 
 ## Conclusion — Et pour les échecs ?
 
-Au cours de cet atelier, nous avons découvert deux façons différentes de construire une intelligence artificielle pour jouer au Tic-Tac-Toe.
+Au début de cet atelier, nous nous sommes posé une question :
 
-### Approche 1 — Apprendre à partir d'exemples
+> Comment apprendre à un ordinateur à jouer à un jeu ?
 
-Notre première IA :
+Au fil des activités, nous avons découvert qu'il existe plusieurs façons de construire une intelligence artificielle.
 
-- observait des parties gagnantes;
-- apprenait à partir des données recueillies;
-- reproduisait les décisions qu'elle associait à la victoire.
+### Première approche : apprendre à partir d'exemples
 
-### Approche 2 — Utiliser les règles du jeu
+Notre première IA observait des parties gagnantes.
 
-Notre deuxième IA :
+Elle apprenait à partir des données que nous lui fournissions.
 
-- connaissait les règles du jeu;
-- analysait les conséquences de ses actions;
-- choisissait le coup qui lui semblait le plus avantageux.
+Nous avons découvert que :
+
+- la quantité de données est importante;
+- la variété des exemples est importante;
+- la qualité des données est tout aussi importante.
+
+Une IA peut apprendre de bonnes stratégies.
+
+Mais elle peut aussi apprendre de mauvaises habitudes.
+
+---
+
+### Deuxième approche : utiliser les règles du jeu
+
+Notre deuxième IA n'avait besoin d'aucune donnée d'entraînement.
+
+Elle utilisait :
+
+- les règles du jeu;
+- les coups possibles;
+- les conditions de victoire.
+
+Au lieu d'imiter les gagnants, elle analysait les conséquences de ses actions.
+
+---
+
+### Mais qu'en est-il des échecs ?
 
 Question :
 
-> Pourrions-nous utiliser ces mêmes approches pour les échecs ?
+> Pourrions-nous utiliser ces mêmes approches pour jouer aux échecs ?
 
-### Première difficulté : apprendre à partir des données
+Les échecs sont beaucoup plus complexes que le Tic-Tac-Toe.
 
 Au Tic-Tac-Toe :
 
-- une partie contient au maximum 9 coups;
-- chaque situation de jeu contient seulement 9 cases;
-- le nombre de situations possibles reste relativement petit.
+- le plateau contient 9 cases;
+- une partie dure au maximum 9 coups;
+- le nombre total de parties possibles est d'environ 255 000.
 
 Aux échecs :
 
+- le plateau contient 64 cases;
+- il y a 32 pièces;
 - une partie contient souvent plusieurs dizaines de coups;
-- chaque situation de jeu contient 64 cases;
-- chaque case peut contenir différentes pièces;
-- le nombre de situations possibles devient immense.
+- le nombre de parties possibles est gigantesque.
 
-Une seule partie d'échecs produit déjà beaucoup plus d'informations qu'une partie complète de Tic-Tac-Toe.
-
-Question :
-
-> Serait-il possible de montrer toutes les situations possibles à une IA ?
-
-Discussion :
-
-Le nombre de situations possibles est tellement grand qu'il est impossible de toutes les enregistrer ou de toutes les observer.
-
-Message :
-
-L'apprentissage à partir de données devient beaucoup plus difficile lorsque le problème devient très complexe.
-
-### Deuxième difficulté : explorer toutes les possibilités
-
-Notre IA basée sur les règles utilisait une idée semblable à Minimax.
-
-Pour choisir un coup, elle explorait différentes possibilités et comparait les résultats.
-
-Cette approche fonctionne très bien au Tic-Tac-Toe.
-
-Pourquoi ?
-
-Parce que le nombre de possibilités reste relativement limité.
-
-Au Tic-Tac-Toe :
+On estime qu'il existe environ :
 
 ```text
-≈ 255 000 parties possibles
+10 000 000 000 000 000 000 000 000 000 000 000 000 000
 ```
 
-Aux échecs :
+soit :
 
 ```text
-≈ 10 000 000 000 000 000 000 000 000 000 000 000 000 000
-```
-
-soit environ :
-
-```text
-10^40 parties possibles
+10^40 parties différentes
 ```
 
 Pour se faire une idée :
@@ -1208,51 +1198,55 @@ La Voie lactée contient environ :
 
 Le nombre de parties possibles aux échecs est immensément plus grand que le nombre d'étoiles dans notre galaxie.
 
-Question :
+---
 
-> Un ordinateur pourrait-il explorer toutes ces possibilités ?
+### Les limites de nos deux approches
 
-Discussion :
+Notre IA basée sur l'apprentissage rencontrerait une première difficulté.
 
-Même les ordinateurs modernes ne peuvent pas explorer toutes les parties possibles d'échecs.
+Une partie d'échecs contient beaucoup plus de situations qu'une partie de Tic-Tac-Toe.
 
-Message :
+Il faudrait énormément de données pour lui montrer suffisamment d'exemples.
 
-Explorer toutes les possibilités devient impossible lorsque le problème devient trop complexe.
+Notre IA basée sur les règles rencontrerait une autre difficulté.
+
+Explorer toutes les possibilités devient impossible.
+
+Même les ordinateurs modernes ne peuvent pas analyser toutes les parties possibles d'échecs.
+
+---
 
 ### Un défi pour les chercheurs
 
 Pendant longtemps, les chercheurs ont cherché à construire une IA capable de battre les meilleurs joueurs d'échecs du monde.
 
-Mais ils faisaient face à deux difficultés :
+Ils devaient résoudre un problème difficile :
 
-- trop de situations possibles pour tout apprendre;
+- trop de situations possibles pour tout apprendre ;
 - trop de possibilités pour tout calculer.
 
-Question :
+---
 
-> Comment construire une IA capable de battre un champion du monde dans ces conditions ?
+### Une première réussite
 
-### Une première réponse : davantage de calcul
+En 1997, Deep Blue est devenu le premier ordinateur à battre le champion du monde d'échecs Garry Kasparov.
 
-Dans les années 1990, des chercheurs ont construit des moteurs d'échecs capables d'analyser un très grand nombre de positions.
+Pour y parvenir, il utilisait :
 
-En 1997, Deep Blue est devenu le premier ordinateur à battre le champion du monde Garry Kasparov lors d'un match officiel.
-
-Pour y parvenir, Deep Blue utilisait :
-
-- les règles du jeu;
-- une immense puissance de calcul;
+- les règles du jeu ;
+- une immense puissance de calcul ;
 - de nombreuses stratégies conçues par des experts.
 
-### Une nouvelle génération d'IA
+---
 
-Plus récemment, des systèmes comme AlphaZero ont adopté une approche différente.
+### Les IA modernes
 
-Ils combinent :
+Aujourd'hui, des systèmes comme AlphaZero combinent plusieurs approches.
 
-- l'apprentissage à partir de données;
-- l'exploration des possibilités;
+Ils utilisent :
+
+- l'apprentissage à partir de données ;
+- le raisonnement ;
 - la puissance de calcul.
 
 Autrement dit :
@@ -1265,26 +1259,17 @@ Raisonnement
 Calcul
 ```
 
+---
+
 ### Message final
 
-Au début de l'atelier, nous nous sommes posé une question :
-
-> Comment apprendre à un ordinateur à jouer à un jeu ?
-
-Nous avons découvert qu'il n'existe pas une seule réponse.
+Au cours de cet atelier, nous avons découvert qu'il n'existe pas une seule façon de construire une intelligence artificielle.
 
 Certaines IA apprennent à partir d'exemples.
 
-Certaines utilisent les règles du jeu pour raisonner.
+Certaines utilisent les règles d'un problème pour raisonner.
 
-Les systèmes les plus avancés combinent souvent plusieurs approches.
-
-C'est ce qui leur permet aujourd'hui de résoudre des problèmes beaucoup plus complexes que le Tic-Tac-Toe.
-
----
-
-
-
+Les systèmes les plus avancés combinent souvent plusieurs techniques.
 
 En intelligence artificielle, le plus important n'est pas seulement le résultat obtenu.
 
