@@ -9,9 +9,9 @@
 
 | Section | Temps |
 |----------|------:|
-| Introduction + Acte 1 | 7 min |
-| Acte 2 – Création des données | 12 min |
-| Acte 3 – Entraînement de l'IA | 5 min |
+| Introduction + Acte 1 | 6 min |
+| Acte 2 – Création des données | 14 min |
+| Acte 3 – Entraînement de l'IA | 4 min |
 | Acte 4 – Jouer contre l'IA | 10 min |
 | Acte 5 – Limites de l'apprentissage | 8 min |
 | Acte 6 – IA à partir des règles | 8 min |
@@ -53,33 +53,12 @@ Ils découvriront notamment qu'un ordinateur peut :
 
 # Messages clés
 
-## Message 1
-
-Une IA peut apprendre à partir d'exemples.
-
-## Message 2
-
-La qualité d'une IA dépend de la qualité des données utilisées pour l'entraîner.
-
-## Message 3
-
-Une IA n'apprend pas nécessairement les règles.
-
-## Message 4
-
-Il existe plusieurs façons de construire une IA.
-
-## Message 5
-
-Certaines IA apprennent à partir de données.
-
-D'autres prennent des décisions à partir de règles et de raisonnement.
-
-## Message 6
-
-Une IA ne sait pas qu'elle a raison.
-
-Elle estime simplement quelle réponse est la plus probable selon ce qu'elle a appris.
+- Une IA peut apprendre à partir d'exemples.
+- La qualité d'une IA dépend de la qualité des données utilisées pour l'entraîner.
+- Une IA n'apprend pas nécessairement les règles.
+- Il existe plusieurs façons de construire une IA.
+- Certaines IA apprennent à partir de données. D'autres prennent des décisions à partir de règles et de raisonnement.
+- Une IA ne sait pas qu'elle a raison. Elle estime simplement quelle réponse est la plus probable selon ce qu'elle a appris.
 
 ---
 
