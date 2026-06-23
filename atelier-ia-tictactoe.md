@@ -914,78 +914,83 @@ Question :
 
 ---
 
-## Acte 6 — Une autre façon de construire une IA
+## Acte 6 — Une IA peut-elle jouer sans apprendre ?
 
-Jusqu'à maintenant, notre IA a appris à partir d'exemples.
+Depuis le début de l'atelier, nous avons entraîné notre IA avec des exemples.
 
-Question :
+Nous avons vu qu'elle pouvait :
 
-> Existe-t-il une autre façon de construire une IA pour jouer au Tic-Tac-Toe ?
-
-Rappel :
-
-Notre première IA :
-
-- observait des parties gagnantes;
-- apprenait à partir des exemples;
-- reproduisait des décisions déjà vues.
-
-Mais nous avons découvert une limite importante :
-
-> Si les données sont imparfaites, l'IA peut apprendre de mauvaises habitudes.
+* apprendre à partir de données;
+* reproduire certaines stratégies observées;
+* améliorer ses performances lorsqu'on lui fournit de nouveaux exemples.
 
 Question :
 
-> Comment pourrions-nous éviter ce problème ?
+> Une intelligence artificielle doit-elle toujours apprendre à partir de données ?
 
-### Réflexion collective
+> Pourrait-on construire une IA capable de jouer sans lui montrer une seule partie ?
 
-Supposons que nous voulions créer une nouvelle IA.
+---
 
-Consigne :
+### Réflexion
 
-Ne lui montrer aucune partie.
+Supposons que nous effacions toutes les données d'entraînement.
 
-Ne lui fournir aucune donnée d'entraînement.
+L'IA ne connaît plus aucun exemple.
 
 Questions :
 
-- Peut-elle quand même jouer correctement ?
-- De quoi aurait-elle besoin ?
+* Peut-elle quand même jouer ?
+* Que faudrait-il lui donner à la place ?
 
 Discussion :
 
-Faire émerger :
+Faire émerger les idées suivantes :
 
-- les règles du jeu;
-- les coups possibles;
-- les conditions de victoire.
+* les règles du jeu;
+* les coups possibles;
+* les conditions de victoire.
 
-### Une nouvelle approche
+---
 
-Plutôt que d'apprendre à partir d'exemples, nous allons fournir à l'ordinateur :
+### Une autre façon de construire une IA
 
-- les règles du jeu;
-- les coups possibles;
-- les conditions de victoire.
+Au lieu d'apprendre à partir d'exemples, nous pouvons fournir à l'ordinateur :
 
-L'ordinateur pourra alors réfléchir aux conséquences de ses actions.
+* les règles du jeu;
+* les coups possibles;
+* les conditions de victoire.
 
-### Activité — Jouer contre l'IA à partir de règles
+L'ordinateur peut alors analyser les conséquences de ses actions avant de jouer.
 
-Les élèves ouvrent l'application en mode :
+Plutôt que de se demander :
 
-**Jouer contre l'IA à partir de règles**
+> « Que faisaient les gagnants dans cette situation ? »
+
+il peut se demander :
+
+> « Que va-t-il arriver si je joue ici ? »
+
+---
+
+### Activité — Jouons contre une IA basée sur les règles
+
+Passer en mode :
+
+**Jouer contre l'IA à partir des règles**
 
 #### Étape 1
 
-Observer le comportement de cette nouvelle IA.
+Avant de commencer, chaque équipe formule une hypothèse.
 
-Question :
+Questions :
 
-> Selon vous, jouera-t-elle mieux, moins bien ou de façon similaire à l'IA entraînée avec les données ?
+* Cette IA sera-t-elle meilleure ou moins bonne que notre IA entraînée ?
+* Sera-t-elle plus facile ou plus difficile à battre ?
+* Commettra-t-elle les mêmes erreurs ?
+* Semble-t-elle plus intelligente ?
 
-Chaque équipe formule une hypothèse.
+---
 
 #### Étape 2
 
@@ -993,83 +998,84 @@ Jouer plusieurs parties contre cette nouvelle IA.
 
 Observer :
 
-- les coups joués;
-- les blocages effectués;
-- les occasions de victoire saisies;
-- les différences avec l'IA précédente.
+* bloque-t-elle les menaces ?
+* profite-t-elle des occasions de victoire ?
+* semble-t-elle hésiter ?
+* reproduit-elle les erreurs observées précédemment ?
 
 Questions :
 
-- L'IA semble-t-elle jouer différemment ?
-- Commet-elle les mêmes erreurs que l'IA entraînée ?
-- Est-elle plus difficile à battre ?
+* Cette IA joue-t-elle différemment ?
+* Est-elle plus difficile à battre ?
+* Avez-vous remarqué des différences importantes avec l'IA entraînée ?
+
+---
 
 #### Étape 3
 
-Comparer les deux IA.
+Comparer les deux approches.
 
 Compléter le tableau suivant :
 
-| Observation | IA par apprentissage | IA à partir des règles |
-|-------------|---------------------|------------------------|
-| Facile à battre ? | | |
-| Fait parfois des erreurs ? | | |
-| Bloque les menaces ? | | |
-| Saisit une victoire immédiate ? | | |
+| Observation                         | IA par apprentissage | IA basée sur les règles |
+| ----------------------------------- | -------------------- | ----------------------- |
+| Facile à battre ?                   |                      |                         |
+| Commet parfois des erreurs ?        |                      |                         |
+| Bloque les menaces ?                |                      |                         |
+| Saisit une victoire immédiate ?     |                      |                         |
+| Dépend des données d'entraînement ? |                      |                         |
 
 Discussion :
 
 Les élèves mettent en commun leurs observations.
 
+---
+
 ### Comment cette IA prend-elle ses décisions ?
 
-Considérons la position suivante :
+Notre première IA se demandait :
 
-```text
-X | X |
----------
-O | O |
----------
-| | 
-```
+> « Que faisaient les gagnants dans cette situation ? »
 
-Question :
+Cette nouvelle IA se demande :
 
-> Quel coup devriez-vous jouer ?
+> « Que va-t-il arriver si je joue ici ? »
 
-La victoire est immédiate.
+Elle examine plusieurs coups possibles.
 
-Cette nouvelle IA est capable de repérer cette situation en analysant les conséquences de ses coups.
+Pour chacun d'eux, elle essaie de prévoir ce qui pourrait arriver ensuite.
 
-Elle ne se demande pas :
+Puis elle choisit le coup qui lui semble le plus avantageux.
 
-> « Qu'ont fait les gagnants dans cette situation ? »
-
-Elle se demande :
-
-> « Que va-t-il se passer si je joue ici ? »
+---
 
 ### Le principe de Minimax
 
-Cette approche est appelée **Minimax**.
+Cette approche est inspirée d'un algorithme appelé **Minimax**.
 
 Son objectif est simple :
 
-- chercher les coups possibles;
-- analyser leurs conséquences;
-- choisir le coup qui conduit au meilleur résultat.
+* explorer les coups possibles;
+* analyser leurs conséquences;
+* choisir le meilleur résultat.
 
-L'ordinateur suppose que son adversaire essaiera lui aussi de jouer du mieux possible.
+Contrairement à notre première IA, elle n'a pas besoin de données d'entraînement.
 
-### Comparaison
+Elle s'appuie directement sur les règles du jeu.
 
-| IA par apprentissage | IA à partir des règles |
-|---------------------|------------------------|
-| Apprend à partir de données | Utilise les règles du jeu |
-| A besoin d'exemples | A besoin des règles |
-| Peut reproduire des erreurs humaines | Ne reproduit pas les erreurs humaines |
-| Dépend de la qualité des données | Dépend de la qualité des règles |
-| Imite les gagnants | Calcule les conséquences |
+---
+
+### Comparaison des deux approches
+
+| IA par apprentissage                 | IA basée sur les règles                                 |
+| ------------------------------------ | ------------------------------------------------------- |
+| Observe des exemples                 | Connaît les règles                                      |
+| Apprend à partir des données         | Analyse les conséquences                                |
+| Dépend de la qualité des données     | Dépend des règles du jeu                                |
+| Peut reproduire des erreurs humaines | Ne reproduit pas les erreurs observées dans les données |
+| A besoin d'un entraînement           | Peut jouer sans entraînement                            |
+
+---
 
 ### Réflexion
 
@@ -1079,27 +1085,33 @@ Question :
 
 Discussion :
 
+Il n'y a pas nécessairement une seule bonne réponse.
+
 Les deux IA prennent des décisions.
 
-Cependant, elles utilisent des approches très différentes.
+Mais elles utilisent des approches très différentes.
 
-L'une apprend à partir d'exemples.
-
-L'autre raisonne à partir des règles du jeu.
+---
 
 ### Message clé
 
 Une intelligence artificielle n'apprend pas toujours à partir de données.
 
-Certaines IA apprennent.
+Certaines IA apprennent à partir d'exemples.
 
-D'autres prennent leurs décisions à partir de règles et de raisonnement.
+D'autres utilisent les règles du problème pour raisonner.
+
+Les deux approches permettent à un ordinateur de prendre des décisions.
+
+---
 
 ### Transition
 
 Le Tic-Tac-Toe est un jeu relativement simple.
 
-Mais que se passe-t-il lorsque le jeu devient beaucoup plus complexe, comme les échecs ?
+Question :
+
+> Ces deux approches fonctionneraient-elles aussi bien pour un jeu beaucoup plus complexe, comme les échecs ?
 
 ---
 
