@@ -143,10 +143,14 @@ function updateStatus(message, state = "", showRecordedMoves = false) {
 
 function updateTrainingModeIcon() {
   const isTrainingMode = modeSelect.value === "ai-training";
-  const isAiMode = modeSelect.value === "vs-ai";
+  const isAiMode = isAiPlayMode();
 
   titleRow.classList.toggle("ai-icons-visible", isTrainingMode || isAiMode);
   titleRow.classList.toggle("training-mode", isTrainingMode);
+}
+
+function isAiPlayMode() {
+  return modeSelect.value === "vs-ai" || modeSelect.value === "rules-ai";
 }
 
 function updatePanels() {
@@ -288,9 +292,9 @@ function finishGame(winner) {
     if (modeSelect.value === "ai-training") {
       addWinnerExamples(winner);
       updateStatus(`${winner} a gagné ! Partie enregistrée.`, "win", true);
-    } else if (modeSelect.value === "vs-ai" && winner === aiPlayer) {
+    } else if (isAiPlayMode() && winner === aiPlayer) {
       updateStatus("L'IA a gagné !", "ai-win");
-    } else if (modeSelect.value === "vs-ai" && winner === humanPlayer) {
+    } else if (isAiPlayMode() && winner === humanPlayer) {
       updateStatus("Tu as battu l'IA !", "win");
     } else {
       updateStatus(`${winner} a gagné !`, "win");
@@ -370,7 +374,7 @@ function handleMove(index) {
     return;
   }
 
-  if (modeSelect.value === "vs-ai" && currentPlayer !== humanPlayer) {
+  if (isAiPlayMode() && currentPlayer !== humanPlayer) {
     return;
   }
 
@@ -381,7 +385,7 @@ function handleMove(index) {
     return;
   }
 
-  if (modeSelect.value === "vs-ai") {
+  if (isAiPlayMode()) {
     currentPlayer = aiPlayer;
     scheduleAiMove();
     return;
@@ -397,7 +401,63 @@ function createMoveRanking(predictions) {
     .sort((a, b) => b.confidence - a.confidence);
 }
 
+function minimax(state, isMaximizing, depth = 0, cache = new Map()) {
+  const winner = getWinner(state);
+
+  if (winner === aiPlayer) {
+    return 10 - depth;
+  }
+
+  if (winner === humanPlayer) {
+    return depth - 10;
+  }
+
+  if (state.every(Boolean)) {
+    return 0;
+  }
+
+  const cacheKey = `${state.map((cell) => cell || "-").join("")}:${isMaximizing}`;
+
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
+  }
+
+  const scores = availableMoves(state).map((move) => {
+    const nextState = [...state];
+    nextState[move] = isMaximizing ? aiPlayer : humanPlayer;
+    return minimax(nextState, !isMaximizing, depth + 1, cache);
+  });
+  const score = isMaximizing ? Math.max(...scores) : Math.min(...scores);
+
+  cache.set(cacheKey, score);
+  return score;
+}
+
+function chooseMinimaxMove(state) {
+  const cache = new Map();
+  const scoredMoves = availableMoves(state).map((move) => {
+    const nextState = [...state];
+    nextState[move] = aiPlayer;
+
+    return {
+      index: move,
+      score: minimax(nextState, false, 0, cache)
+    };
+  });
+  const bestScore = Math.max(...scoredMoves.map(({ score }) => score));
+  const bestMoves = scoredMoves.filter(({ score }) => score === bestScore);
+
+  return randomItem(bestMoves).index;
+}
+
 async function predictAiMove() {
+  if (modeSelect.value === "rules-ai") {
+    return {
+      index: chooseMinimaxMove(board),
+      confidence: null
+    };
+  }
+
   if (!modelIsReady || !model || !window.tf) {
     const move = randomItem(availableMoves());
     return { index: move, confidence: null };
@@ -441,9 +501,11 @@ async function makeAiMove(activeGameId) {
     return;
   }
 
-  lastConfidence = move.confidence;
-  confidenceHistory.push(move.confidence ?? 0);
-  updatePanels();
+  if (modeSelect.value === "vs-ai") {
+    lastConfidence = move.confidence;
+    confidenceHistory.push(move.confidence ?? 0);
+    updatePanels();
+  }
   aiThinking = false;
   placeMark(move.index, aiPlayer);
 
@@ -579,7 +641,7 @@ function resetGame(showModeStatus = true) {
 
   if (modeSelect.value === "ai-training") {
     updateStatus("X commence");
-  } else if (modeSelect.value === "vs-ai") {
+  } else if (isAiPlayMode()) {
     updateStatus("L'IA commence avec X");
     scheduleAiMove();
   } else {
