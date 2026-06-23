@@ -62,6 +62,39 @@ Ils découvriront notamment qu'un ordinateur peut :
 
 ---
 
+# Mise en situation
+
+Aujourd'hui, les ordinateurs sont capables de battre les meilleurs joueurs du monde dans plusieurs jeux.
+
+Par exemple :
+
+* en 1997, un ordinateur appelé **Deep Blue** a battu le champion du monde d'échecs Garry Kasparov ;
+* en 2016, une intelligence artificielle appelée **AlphaGo** a battu l'un des meilleurs joueurs de Go au monde, un jeu considéré comme encore plus complexe que les échecs.
+
+Pendant des décennies, plusieurs experts croyaient pourtant qu'un ordinateur ne pourrait jamais rivaliser avec les meilleurs joueurs humains dans ces jeux de stratégie.
+
+Après tout, comment une machine pourrait-elle réfléchir mieux qu'un champion du monde ?
+
+Pourtant, c'est exactement ce qui s'est produit.
+
+Mais il y a quelque chose d'encore plus surprenant.
+
+Un ordinateur ne joue pas comme un humain.
+
+Il ne réfléchit pas exactement de la même façon.
+
+Il ne comprend pas les jeux comme nous les comprenons.
+
+Alors comment un ordinateur peut-il devenir aussi fort ?
+
+Comment peut-il apprendre à jouer ?
+
+Et existe-t-il une seule façon de construire une intelligence artificielle capable de prendre de bonnes décisions ?
+
+Aujourd'hui, nous allons créer notre propre intelligence artificielle de Tic-Tac-Toe et découvrir comment un ordinateur peut apprendre à jouer à un jeu.
+
+---
+
 # Ligne narrative
 
 ## Acte 1 — Comment apprendre à un ordinateur à jouer ?
