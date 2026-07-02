@@ -10,9 +10,11 @@ const modeSelect = document.querySelector("#mode");
 const titleRow = document.querySelector("#titleRow");
 const trainingPanel = document.querySelector("#trainingPanel");
 const aiPanel = document.querySelector("#aiPanel");
+const rulesPanel = document.querySelector("#rulesPanel");
 const savedMovesCount = document.querySelector("#savedMovesCount");
 const savedGamesCount = document.querySelector("#savedGamesCount");
 const confidenceScore = document.querySelector("#confidenceScore");
+const rulesLeavesCount = document.querySelector("#rulesLeavesCount");
 const confidenceLine = document.querySelector("#confidenceLine");
 const confidenceDots = document.querySelector("#confidenceDots");
 const trainModelButton = document.querySelector("#trainModel");
@@ -44,6 +46,7 @@ let model = null;
 let modelIsReady = false;
 let isTrainingModel = false;
 let lastConfidence = null;
+let lastRulesLeaves = null;
 let confidenceHistory = [];
 let latestRecordedMoves = [];
 
@@ -156,9 +159,11 @@ function isAiPlayMode() {
 function updatePanels() {
   trainingPanel.hidden = modeSelect.value !== "ai-training";
   aiPanel.hidden = modeSelect.value !== "vs-ai";
+  rulesPanel.hidden = modeSelect.value !== "rules-ai";
   savedMovesCount.textContent = trainingData.inputs.length.toLocaleString("fr-CA");
   savedGamesCount.textContent = trainingData.savedGames.toLocaleString("fr-CA");
   confidenceScore.textContent = lastConfidence === null ? "--" : `${Math.round(lastConfidence * 100)} %`;
+  rulesLeavesCount.textContent = lastRulesLeaves === null ? "--" : lastRulesLeaves.toLocaleString("fr-CA");
   trainModelButton.disabled = isTrainingModel || trainingData.inputs.length === 0 || !window.tf;
   updateConfidenceChart();
 }
@@ -405,15 +410,24 @@ function minimax(state, isMaximizing, depth = 0, cache = new Map()) {
   const winner = getWinner(state);
 
   if (winner === aiPlayer) {
-    return 10 - depth;
+    return {
+      score: 10 - depth,
+      leaves: 1
+    };
   }
 
   if (winner === humanPlayer) {
-    return depth - 10;
+    return {
+      score: depth - 10,
+      leaves: 1
+    };
   }
 
   if (state.every(Boolean)) {
-    return 0;
+    return {
+      score: 0,
+      leaves: 1
+    };
   }
 
   const cacheKey = `${state.map((cell) => cell || "-").join("")}:${isMaximizing}`;
@@ -422,15 +436,19 @@ function minimax(state, isMaximizing, depth = 0, cache = new Map()) {
     return cache.get(cacheKey);
   }
 
-  const scores = availableMoves(state).map((move) => {
+  const outcomes = availableMoves(state).map((move) => {
     const nextState = [...state];
     nextState[move] = isMaximizing ? aiPlayer : humanPlayer;
     return minimax(nextState, !isMaximizing, depth + 1, cache);
   });
-  const score = isMaximizing ? Math.max(...scores) : Math.min(...scores);
+  const scores = outcomes.map(({ score }) => score);
+  const result = {
+    score: isMaximizing ? Math.max(...scores) : Math.min(...scores),
+    leaves: outcomes.reduce((total, outcome) => total + outcome.leaves, 0)
+  };
 
-  cache.set(cacheKey, score);
-  return score;
+  cache.set(cacheKey, result);
+  return result;
 }
 
 function chooseMinimaxMove(state) {
@@ -441,20 +459,27 @@ function chooseMinimaxMove(state) {
 
     return {
       index: move,
-      score: minimax(nextState, false, 0, cache)
+      ...minimax(nextState, false, 0, cache)
     };
   });
   const bestScore = Math.max(...scoredMoves.map(({ score }) => score));
   const bestMoves = scoredMoves.filter(({ score }) => score === bestScore);
+  const selectedMove = randomItem(bestMoves);
 
-  return randomItem(bestMoves).index;
+  return {
+    index: selectedMove.index,
+    leaves: scoredMoves.reduce((total, move) => total + move.leaves, 0)
+  };
 }
 
 async function predictAiMove() {
   if (modeSelect.value === "rules-ai") {
+    const move = chooseMinimaxMove(board);
+
     return {
-      index: chooseMinimaxMove(board),
-      confidence: null
+      index: move.index,
+      confidence: null,
+      leaves: move.leaves
     };
   }
 
@@ -504,6 +529,9 @@ async function makeAiMove(activeGameId) {
   if (modeSelect.value === "vs-ai") {
     lastConfidence = move.confidence;
     confidenceHistory.push(move.confidence ?? 0);
+    updatePanels();
+  } else if (modeSelect.value === "rules-ai") {
+    lastRulesLeaves = move.leaves;
     updatePanels();
   }
   aiThinking = false;
@@ -591,6 +619,7 @@ async function clearTrainingData() {
   };
   moveHistory = createEmptyHistory();
   lastConfidence = null;
+  lastRulesLeaves = null;
   confidenceHistory = [];
   saveTrainingData();
 
@@ -622,6 +651,7 @@ function resetGame(showModeStatus = true) {
   gameId += 1;
   moveHistory = createEmptyHistory();
   lastConfidence = null;
+  lastRulesLeaves = null;
   confidenceHistory = [];
   clearRecordedMovesPreview();
 
