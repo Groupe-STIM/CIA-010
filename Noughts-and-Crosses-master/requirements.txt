@@ -1,0 +1,10 @@
+# noughts and crosses dependencies
+certifi==2025.6.15
+chardet==5.2.0
+idna==3.10
+pygame==2.6.1
+requests==2.32.4
+urllib3==2.5.0
+# mlforkidsnumbers dependencies
+ydf==0.12.0
+pandas==2.3.0

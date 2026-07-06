@@ -7,6 +7,8 @@
   --line: #d9dee7;
   --accent: #2563eb;
   --accent-soft: #e8f0ff;
+  --ai: #7c3aed;
+  --ai-soft: #f1ebff;
   --win: #0f766e;
   --win-soft: #e2f7f3;
   --draw: #6b7280;
@@ -81,6 +83,10 @@ h1 {
   flex: 0 0 51px;
 }
 
+.ai-icons-visible .ai-watch-icon {
+  display: block;
+}
+
 .training-mode .ai-watch-icon {
   display: block;
   animation: flash 1800ms ease-in-out infinite;
@@ -103,6 +109,7 @@ h1 {
 }
 
 .status {
+  position: relative;
   min-height: 44px;
   display: grid;
   place-items: center;
@@ -115,6 +122,41 @@ h1 {
   text-align: center;
 }
 
+.status-message {
+  padding: 0 30px;
+}
+
+.status-inspect {
+  position: absolute;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.status-inspect:hover {
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.status-inspect:focus-visible,
+.dialog-close:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.28);
+  outline-offset: 2px;
+}
+
+.status-inspect[hidden] {
+  display: none;
+}
+
 .status.win {
   background: var(--win-soft);
   color: var(--win);
@@ -123,6 +165,279 @@ h1 {
 .status.draw {
   background: var(--draw-soft);
   color: var(--draw);
+}
+
+.status.ai-win {
+  background: var(--ai-soft);
+  color: var(--ai);
+}
+
+.status.training {
+  background: var(--ai-soft);
+  color: var(--ai);
+  animation: status-blink 900ms ease-in-out infinite;
+}
+
+@keyframes status-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.42;
+  }
+}
+
+.mode-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.mode-panel[hidden] {
+  display: none;
+}
+
+.panel-stat {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.panel-label {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.panel-stat strong {
+  color: var(--ai);
+  font-size: 25px;
+  line-height: 1;
+}
+
+.recorded-info {
+  gap: 10px;
+}
+
+.recorded-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.recorded-stat {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  padding: 9px;
+  border-radius: 6px;
+  background: var(--ai-soft);
+}
+
+.recorded-stat span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.panel-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.panel-button {
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #eef0f3;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.panel-button.primary {
+  background: var(--ai);
+  color: #ffffff;
+}
+
+.panel-button:hover:not(:disabled) {
+  background: #e1e5eb;
+}
+
+.panel-button.primary:hover:not(:disabled) {
+  background: #6d28d9;
+}
+
+.panel-button:disabled {
+  color: var(--muted);
+  background: #f3f4f6;
+  cursor: default;
+}
+
+.confidence-chart {
+  min-width: 0;
+  padding: 8px 8px 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.confidence-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chart-axis {
+  stroke: var(--line);
+  stroke-width: 2;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--ai);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.chart-dot {
+  fill: var(--ai);
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.chart-label,
+.chart-move-label {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.chart-move-label {
+  text-anchor: middle;
+}
+
+.recorded-moves-dialog {
+  width: min(92vw, 420px);
+  max-height: min(82vh, 720px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: 0 20px 60px rgba(31, 41, 55, 0.24);
+}
+
+.recorded-moves-dialog::backdrop {
+  background: rgba(31, 41, 55, 0.48);
+}
+
+.dialog-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.dialog-close {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #eef0f3;
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialog-close:hover {
+  background: #e1e5eb;
+}
+
+.recorded-moves-list {
+  max-height: calc(min(82vh, 720px) - 55px);
+  overflow-y: auto;
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.recorded-move-item {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.recorded-move-item h3 {
+  width: 100%;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.recorded-board {
+  width: min(100%, 210px);
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.recorded-board-cell {
+  min-width: 0;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.recorded-board-cell.recorded-move-cell {
+  border: 2px solid var(--ai);
+  background: #fed13f;
+  color: #111827;
 }
 
 .board {
@@ -184,6 +499,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -194,6 +510,7 @@ h1 {
 }
 
 .mode-control select {
+  max-width: 100%;
   min-height: 40px;
   min-width: 170px;
   padding: 0 12px;
@@ -227,4 +544,28 @@ h1 {
 
 .reset:hover {
   background: #111827;
+}
+
+@media (max-width: 380px) {
+  body {
+    padding: 14px;
+  }
+
+  .game {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 27px;
+  }
+
+  .ai-watch-icon {
+    width: 39px;
+    height: 39px;
+    flex-basis: 39px;
+  }
+
+  .panel-actions {
+    grid-template-columns: 1fr;
+  }
 }
